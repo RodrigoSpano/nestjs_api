@@ -1,6 +1,14 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { compare, hash } from 'bcrypt';
 import * as jwt from '@nestjs/jwt';
+import { Post } from 'src/posts/post.entity';
 
 @Entity()
 export class User {
@@ -15,6 +23,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Post, (post) => post.author)
+  post: Post[];
 
   @BeforeInsert()
   async hashPassword() {
