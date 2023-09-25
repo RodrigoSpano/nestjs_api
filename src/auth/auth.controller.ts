@@ -36,9 +36,10 @@ export class AuthController {
   async login(@Body() data: loginDto): Promise<loginReturnDto | HttpException> {
     if (!data.email || !data.password)
       throw new HttpException('missing values', HttpStatus.BAD_REQUEST);
-    const loginData = this.authService.login(data);
-    if (!(await loginData).token)
-      throw new HttpException('invalid credentials', HttpStatus.BAD_REQUEST);
-    return loginData;
+    const loginData = await this.authService.login(data);
+    if (loginData) {
+      return loginData;
+    }
+    throw new HttpException('invalid credentials', HttpStatus.BAD_REQUEST);
   }
 }

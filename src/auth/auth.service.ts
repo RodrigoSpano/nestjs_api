@@ -15,10 +15,13 @@ export class AuthService {
     const findUser = await this.userService.getUserByEmail(data.email);
     const isMatch = await findUser.comparePassword(data.password);
     if (isMatch) {
-      const token = this.jwtService.sign({
-        id: findUser.id,
-        email: findUser.email,
-      });
+      const token = this.jwtService.sign(
+        {
+          id: findUser.id,
+          email: findUser.email,
+        },
+        { secret: process.env.JWT_SECRET },
+      );
       return {
         user: findUser,
         token,
