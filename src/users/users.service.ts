@@ -6,6 +6,7 @@ import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
 import { userCreateFindDto } from './dto/user-create-find.dto';
 import { loginDto } from 'src/auth/dto/login.dto';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -43,6 +44,9 @@ export class UsersService {
 
   async updateUser(id: number, data: updateUserDto): Promise<User> {
     const findUser = await this.userRepository.findOne({ where: { id } });
+    if (data.password) {
+      data.password = await hash(data.password, 10);
+    }
     const newUser = Object.assign(findUser, data);
     const updatedUser = await this.userRepository.save(newUser);
     return updatedUser;
