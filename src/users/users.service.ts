@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { createUserDto } from './dto/create-user.dto';
 import { updateUserDto } from './dto/update-user.dto';
 import { userCreateFindDto } from './dto/user-create-find.dto';
+import { loginDto } from 'src/auth/dto/login.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +24,10 @@ export class UsersService {
 
   async getUser(id: number): Promise<User> {
     return await this.userRepository.findOne({ where: { id } });
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   async getUserForCreate(data: userCreateFindDto): Promise<User> {

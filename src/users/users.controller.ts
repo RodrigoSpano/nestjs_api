@@ -21,8 +21,6 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() data: createUserDto): Promise<User | HttpException> {
-    if (!data.email || !data.password || !data.username)
-      throw new HttpException('missing values', HttpStatus.BAD_REQUEST);
     const findUser = await this.userService.getUserForCreate({
       email: data.email,
       username: data.username,
